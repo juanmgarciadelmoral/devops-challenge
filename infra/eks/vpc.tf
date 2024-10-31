@@ -4,7 +4,7 @@ resource "aws_vpc" "eks_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "eks-vpc-sherpany"
+    Name = "eks-vpc"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_vpc" "eks_vpc" {
 resource "aws_internet_gateway" "eks_igw" {
   vpc_id = aws_vpc.eks_vpc.id
   tags = {
-    Name = "eks-igw-sherpany"
+    Name = "eks-igw"
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_subnet" "eks_public_subnet_1" {
   map_public_ip_on_launch = true  # Enable Auto-Assign Public IP
 
   tags = {
-    Name = "eks-public-subnet-1-sherpany"
+    Name = "eks-public-subnet-1"
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_subnet" "eks_public_subnet_2" {
   map_public_ip_on_launch = true  # Enable Auto-Assign Public IP
 
   tags = {
-    Name = "eks-public-subnet-2-sherpany"
+    Name = "eks-public-subnet-2"
   }
 }
 

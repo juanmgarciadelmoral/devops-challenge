@@ -14,7 +14,7 @@ resource "aws_eks_cluster" "eks_cluster" {
 
 # EKS Node Group
 resource "aws_eks_node_group" "eks_node_group" {
-  cluster_name    = aws_eks_cluster.eks_cluster.name
+  cluster_name    = var.cluster_name
   node_group_name = "${var.cluster_name}-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = [aws_subnet.eks_public_subnet_1.id, aws_subnet.eks_public_subnet_2.id]
@@ -32,4 +32,14 @@ resource "aws_eks_node_group" "eks_node_group" {
     aws_iam_role_policy_attachment.eks_worker_node_policy,
     aws_iam_role_policy_attachment.ecr_readonly_policy
   ]
+}
+
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name = var.cluster_name
+  addon_name   = "aws-ebs-csi-driver"
+}
+
+resource "aws_eks_addon" "cni" {
+  cluster_name = var.cluster_name
+  addon_name   = "vpc-cni"
 }
