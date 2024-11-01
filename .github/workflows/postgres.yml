@@ -15,14 +15,14 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2  # Adjust to your EKS region
+          aws-region: us-east-2  
 
       - name: Configure kubectl for EKS
         id: eks
         uses: aws-actions/eks-login@v1
         with:
           cluster-name: ${{ secrets.EKS_CLUSTER_NAME }}  # Replace with your EKS cluster name
-          region: us-west-2  # Adjust to your EKS region
+          region: us-east-2  
       
       - name: Install Chamber (Secrets Manager)
         run: |
@@ -42,7 +42,7 @@ jobs:
 
       - name: Apply secrets Manifest to Kubernetes
         run: |
-         kubectl apply -f secrets-manifest.yaml
+         kubectl apply -f secrets.yaml
 
       - name: Apply postgres Manifest to Kubernetes
         run: |
