@@ -17,7 +17,7 @@ jobs:
           role-to-assume: arn:aws:iam::${{ github.env.AWS_ACCOUNT_ID }}:role/GitHubActionsRole
           role-session-name: GitHubActions
       
-          - name: Configure kubectl for EKS
+       - name: Configure kubectl for EKS
         run: |
             aws eks update-kubeconfig --region ${{ github.env.AWS_DEFAULT_REGION }} --name ${{ github.env.EKS_CLUSTER_NAME }}
   
