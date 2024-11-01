@@ -18,12 +18,10 @@ jobs:
           aws-region: us-east-2  
 
       - name: Configure kubectl for EKS
-        id: eks
-        uses: aws-actions/eks-login@v1
-        with:
-          cluster-name: ${{ secrets.EKS_CLUSTER_NAME }}  # Replace with your EKS cluster name
-          region: us-east-2  
-      
+        run: |
+            aws eks update-kubeconfig --region us-east-2 --name sherpany-polls
+  
+    
       - name: Install Chamber (Secrets Manager)
         run: |
             curl -Lo chamber https://github.com/segmentio/chamber/releases/download/v2.10.5/chamber-v2.10.5-linux-amd64
