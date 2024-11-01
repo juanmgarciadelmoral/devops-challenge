@@ -13,13 +13,13 @@ jobs:
       - name: Assume IAM role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-region: ${{ github.env.AWS_DEFAULT_REGION }}
-          role-to-assume: arn:aws:iam::${{ github.env.AWS_ACCOUNT_ID }}:role/GitHubActionsRole
+          aws-region: ${{ vars.AWS_DEFAULT_REGION }}
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/GitHubActionsRole
           role-session-name: GitHubActions
       
       - name: Configure kubectl for EKS
         run: |
-            aws eks update-kubeconfig --region ${{ github.env.AWS_DEFAULT_REGION }} --name ${{ github.env.EKS_CLUSTER_NAME }}
+            aws eks update-kubeconfig --region ${{ vars.AWS_DEFAULT_REGION }} --name ${{ vars.EKS_CLUSTER_NAME }}
     
       - name: Install Chamber (Secrets Manager)
         run: |
@@ -29,7 +29,7 @@ jobs:
 
       - name: Pull secrets with Chamber and set environment variables
         env:
-            CHAMBER_SERVICE_NAME: "${{ github.env.EKS_CLUSTER_NAME }}" 
+            CHAMBER_SERVICE_NAME: "${{ vars.EKS_CLUSTER_NAME }}" 
         run: |
             export $(chamber env $CHAMBER_SERVICE_NAME)
       
