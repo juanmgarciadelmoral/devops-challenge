@@ -10,16 +10,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: Assume IAM role
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2  
-
-      - name: Configure kubectl for EKS
+          aws-region: ${{ github.env.AWS_DEFAULT_REGION }}
+          role-to-assume: arn:aws:iam::${{ github.env.AWS_ACCOUNT_ID }}:role/GitHubActionsRole
+          role-session-name: GitHubActions
+      
+          - name: Configure kubectl for EKS
         run: |
-            aws eks update-kubeconfig --region us-east-2 --name sherpany-polls
+            aws eks update-kubeconfig --region ${{ github.env.AWS_DEFAULT_REGION }} --name ${{ github.env.EKS_CLUSTER_NAME }}
   
     
       - name: Install Chamber (Secrets Manager)
@@ -30,7 +30,7 @@ jobs:
 
       - name: Pull secrets with Chamber and set environment variables
         env:
-            CHAMBER_SERVICE_NAME: "sherpany-polls"  # Replace with your service name in Parameter Store
+            CHAMBER_SERVICE_NAME: "${{ github.env.EKS_CLUSTER_NAME }}" 
         run: |
             export $(chamber env $CHAMBER_SERVICE_NAME)
       
